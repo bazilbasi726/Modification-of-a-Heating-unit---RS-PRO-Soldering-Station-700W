@@ -53,8 +53,19 @@ class HeatingUnitGUI:
     def start_heating(self):
         """Start the heating process"""
         target_temp = self.target_temp_entry.get()
-        self.status_label.config(text=f"Status: Heating to {target_temp}°C", foreground="green")
-        # TODO: Implement serial communication with Arduino
+        
+        # Validate input
+        try:
+            temp_value = float(target_temp)
+            if temp_value < 0 or temp_value > 500:
+                self.status_label.config(text="Error: Temperature must be between 0-500°C", 
+                                        foreground="red")
+                return
+            self.status_label.config(text=f"Status: Heating to {temp_value}°C", foreground="green")
+            # TODO: Implement serial communication with Arduino
+        except ValueError:
+            self.status_label.config(text="Error: Please enter a valid temperature", 
+                                    foreground="red")
         
     def stop_heating(self):
         """Stop the heating process"""
